@@ -10,7 +10,7 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- script: echo Hello, world! ${{ variables.release }}
+- script: echo Hello, world! $(release)
   displayName: 'Run a one-line script'
 
 - script: |
