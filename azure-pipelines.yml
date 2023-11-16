@@ -37,7 +37,7 @@ steps:
     script: |
       Get-ChildItem -path $(System.DefaultWorkingDirectory)
 
-- task: PowerShell@2
+- task: PowerShell@1
   displayName: List all Folders in $(Build.ArtifactStagingDirectory)
   inputs:
     targetType: 'inline'
