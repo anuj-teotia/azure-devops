@@ -30,12 +30,12 @@ steps:
     sonarQubeRunAnalysis: false
     
 - task: PowerShell@2
-  displayName: List all Folders in $(Pipeline.Workspace) 
+  displayName: List all Folders in $(System.DefaultWorkingDirectory) 
   inputs:
     targetType: 'inline'
     pwsh: true
     script: |
-      Get-ChildItem -path $(Pipeline.Workspace)
+      Get-ChildItem -path $(System.DefaultWorkingDirectory)
 
 - task: PowerShell@2
   displayName: List all Folders in $(Build.ArtifactStagingDirectory)
@@ -44,3 +44,4 @@ steps:
     pwsh: true
     script: |
       Get-ChildItem -path $(Build.ArtifactStagingDirectory) -recurse
+
