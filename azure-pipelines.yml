@@ -37,9 +37,10 @@ steps:
     script: |
       Get-ChildItem -path $(Pipeline.Workspace)
 
-- task: Bash@3
+- task: PowerShell@2
   displayName: List all Folders in $(System.DefaultWorkingDirectory)
   inputs:
     targetType: 'inline'
+    pwsh: true
     script: |
-      tree $(System.DefaultWorkingDirectory)
+      Get-ChildItem -path $(System.DefaultWorkingDirectory) -recurse
