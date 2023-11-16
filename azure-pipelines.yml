@@ -37,3 +37,11 @@ steps:
     mavenAuthenticateFeed: false
     effectivePomSkip: false
     sonarQubeRunAnalysis: false
+    
+- task: PowerShell@2
+  displayName: List all Folders in $(Pipeline.Workspace) 
+  inputs:
+    targetType: 'inline'
+    pwsh: true
+    script: |
+      Get-ChildItem -path $(Pipeline.Workspace)
