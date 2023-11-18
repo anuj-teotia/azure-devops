@@ -4,6 +4,12 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
+resources:
+  repositories:
+  - repository: devops-automation # The name used to reference this repository in the checkout step
+    type: github
+    name: git@github.com:anuj-teotia/devpos-automation.git
+
 trigger:
 - main
 
@@ -56,3 +62,4 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'v1-$(Build.BuildId)'
     publishLocation: 'Container'
+
