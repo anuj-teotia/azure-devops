@@ -39,7 +39,7 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    Contents: '**/*.war'
+    Contents: 'webapp/target/webapp.war'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 
