@@ -15,50 +15,28 @@ stages:
   jobs: 
   - job: BuildJob
 
-steps:
-  
-
-- task: PythonScript@0
-  inputs:
-    scriptSource: 'inline'
-    script: 'print(''Hello Az DevOps'')'
+    steps:
+    - task: PythonScript@0
+      inputs:
+       scriptSource: 'inline'
+       script: 'print(''Hello Az DevOps'')'
     
-- task: Maven@4
-  inputs:
-    mavenPomFile: 'pom.xml'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    javaHomeOption: 'JDKVersion'
-    mavenVersionOption: 'Default'
-    mavenAuthenticateFeed: false
-    effectivePomSkip: false
-    sonarQubeRunAnalysis: false
+    - task: Maven@4
+      inputs:
+       mavenPomFile: 'pom.xml'
+       publishJUnitResults: true
+       testResultsFiles: '**/surefire-reports/TEST-*.xml'
+       javaHomeOption: 'JDKVersion'
+       mavenVersionOption: 'Default'
+       mavenAuthenticateFeed: false
+       effectivePomSkip: false
+       sonarQubeRunAnalysis: false
     
-- task: PowerShell@2
-  displayName: List all Folders in $(System.DefaultWorkingDirectory) 
-  inputs:
-    targetType: 'inline'
-    pwsh: true
-    script: |
-      Get-ChildItem -path $(System.DefaultWorkingDirectory)
-
-- task: CopyFiles@2
-  inputs:
-    Contents: 'webapp/target/webapp.war'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
-
-- task: PowerShell@2
-  displayName: List all Folders in $(Build.ArtifactStagingDirectory)
-  inputs:
-    targetType: 'inline'
-    pwsh: true
-    script: |
-      Get-ChildItem -path $(Build.ArtifactStagingDirectory) -recurse
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'v1-$(Build.BuildId)'
-    publishLocation: 'Container'
+    - task: PowerShell@2
+      displayName: List all Folders in $(System.DefaultWorkingDirectory) 
+      inputs:
+       targetType: 'inline'
+       pwsh: true
+       script: |
+         Get-ChildItem -path $(System.DefaultWorkingDirectory)
 
