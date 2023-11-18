@@ -9,7 +9,7 @@ resources:
   - repository: devops-automation # The name used to reference this repository in the checkout step
     type: github
     endpoint: MyGitHubServiceConnection
-    name: git@github.com:anuj-teotia/devpos-automation.git
+    name: anuj-teotia/devpos-automation.git
 
 trigger:
 - main
