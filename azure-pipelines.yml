@@ -9,11 +9,7 @@ trigger:
 
 pool:
   vmImage: "windows-latest"
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'v1-$(Build.BuildId)'
-    publishLocation: 'Container'
+
 steps:
   
 
@@ -55,3 +51,8 @@ steps:
     script: |
       Get-ChildItem -path $(Build.ArtifactStagingDirectory) -recurse
 
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'v1-$(Build.BuildId)'
+    publishLocation: 'Container'
