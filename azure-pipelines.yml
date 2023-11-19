@@ -1,36 +1,77 @@
 trigger:
-- main
+- None
 
-pool:
-  vmImage: "windows-latest"
+variables:
+  imageRepo: kmapp
+  tag: '$(Build.BuildId)'
 
 stages:
 - stage: Build
-  jobs: 
-  - job: BuildJob
-
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
     steps:
-    - task: PythonScript@0
+    - task: Docker@2
+      displayName: Build an image
       inputs:
-       scriptSource: 'inline'
-       script: 'print(''Hello Az DevOps'')'
-    
-    - task: Maven@4
+        containerRegistry: 'DevOps-KM-Registry'
+        repository: '$(imageRepo)'
+        command: 'buildAndPush'
+        Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+        tags: |
+          $(tag)
+   
+    - task: PublishPipelineArtifact@1
       inputs:
-       mavenPomFile: 'pom.xml'
-       publishJUnitResults: true
-       testResultsFiles: '**/surefire-reports/TEST-*.xml'
-       javaHomeOption: 'JDKVersion'
-       mavenVersionOption: 'Default'
-       mavenAuthenticateFeed: false
-       effectivePomSkip: false
-       sonarQubeRunAnalysis: false
-    
-    - task: PowerShell@2
-      displayName: List all Folders in $(System.DefaultWorkingDirectory) 
-      inputs:
-       targetType: 'inline'
-       pwsh: true
-       script: |
-         Get-ChildItem -path $(System.DefaultWorkingDirectory)
+        targetPath: '$(Pipeline.Workspace)/s/kubernetes'
+        artifact: 'manifests'
+        publishLocation: 'pipeline'
 
+- stage: Deploy
+  displayName: Deploy to Dev
+  dependsOn: Build
+  variables:
+    acrdevurl: 'azuredevopskm.azurecr.io'
+    replicaNo: 2
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy to AKS
+    environment: 'dev.default'
+    pool: 
+      vmImage: ubuntu-latest
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'current'
+              artifactName: 'manifests'
+              targetPath: '$(Pipeline.Workspace)/manifests'
+      
+          - task: replacetokens@5
+            displayName: Replace Tokens
+            inputs:
+              rootDirectory: '$(Pipeline.Workspace)/manifests/'
+              targetFiles: 'deployment.yml'
+              encoding: 'auto'
+              writeBOM: true
+              actionOnMissing: 'warn'
+              keepToken: false
+              tokenPrefix: '#'
+              tokenSuffix: '#'
+              useLegacyPattern: false
+              enableTransforms: false
+              enableTelemetry: true
+          - task: KubernetesManifest@0
+            inputs:
+              action: 'deploy'
+              namespace: 'default'
+              manifests: |
+                $(Pipeline.Workspace)/manifests/deployment.yml
+                $(Pipeline.Workspace)/manifests/service.yml
+              containers: '$(acrdevurl)/$(imageRepo):$(tag)'
+              
