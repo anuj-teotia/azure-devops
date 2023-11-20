@@ -1,5 +1,5 @@
 trigger:
-- None
+- main
 
 variables:
   imageRepo: kmapp
@@ -78,11 +78,7 @@ stages:
               useLegacyPattern: false
               enableTransforms: false
               enableTelemetry: true 
-          - task: CmdLine@2
-            inputs:
-              script: |
-                echo "$(Pipeline.Workspace)"
-                tree "$(Pipeline.Workspace)"
+         
           - task: KubernetesManifest@0
             inputs:
               action: 'deploy'
