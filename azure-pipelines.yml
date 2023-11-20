@@ -64,7 +64,7 @@ stages:
               artifactName: 'manifests'
               targetPath: '$(Pipeline.Workspace)/manifests'
       
-          - task: replacetokens@5
+          - task: replacetokens@3
             displayName: Replace Tokens
             inputs:
               rootDirectory: '$(Pipeline.Workspace)/manifests/'
