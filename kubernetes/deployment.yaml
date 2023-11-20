@@ -16,4 +16,4 @@ spec:
         - name: kmapp
           image: azuredevopskm.azurecr.io/kmapp
           ports:
-          - containerPort: 80
+          - containerPort: 8080
