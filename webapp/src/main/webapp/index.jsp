@@ -1,1 +1,1 @@
-<h1>Azure DevOps KM v2</h1>
+<h1>Azure DevOps KM</h1>
