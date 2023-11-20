@@ -88,6 +88,6 @@ stages:
               action: 'deploy'
               namespace: 'default'
               manifests: |
-                $(Pipeline.Workspace)/manifests/deployment.yml
-                $(Pipeline.Workspace)/manifests/service.yml
+                $(Pipeline.Workspace)/manifests/deployment.yaml
+                $(Pipeline.Workspace)/manifests/service.yaml
               containers: '$(acrdevurl)/$(imageRepo):$(tag)'
