@@ -68,7 +68,7 @@ stages:
             displayName: Replace Tokens
             inputs:
               rootDirectory: '$(Pipeline.Workspace)/manifests/'
-              targetFiles: 'deployment.yml'
+              targetFiles: 'deployment.yaml'
               encoding: 'auto'
               writeBOM: true
               actionOnMissing: 'warn'
