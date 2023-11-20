@@ -47,7 +47,7 @@ stages:
   dependsOn: Build
   variables:
     acrdevurl: 'azuredevopskm.azurecr.io'
-    replicaNo: 3
+    replicaNo: 1
   jobs:
   - deployment: Deploy
     displayName: Deploy to AKS
@@ -64,20 +64,23 @@ stages:
               artifactName: 'manifests'
               targetPath: '$(Pipeline.Workspace)/manifests'
       
-          - task: replacetokens@3
+          - task: replacetokens@5
             displayName: Replace Tokens
             inputs:
               rootDirectory: '$(Pipeline.Workspace)/manifests/'
               targetFiles: 'deployment.yaml'
               encoding: 'auto'
+              tokenPattern: 'custom'
+              tokenPrefix: '#'
+              tokenSuffix: '#'
               writeBOM: true
               actionOnMissing: 'warn'
               keepToken: false
-              tokenPrefix: '#'
-              tokenSuffix: '#'
-              useLegacyPattern: false
+              actionOnNoFiles: 'continue'
               enableTransforms: false
-              enableTelemetry: true 
+              enableRecursion: false
+              useLegacyPattern: false
+              enableTelemetry: true
          
           - task: KubernetesManifest@0
             inputs:
