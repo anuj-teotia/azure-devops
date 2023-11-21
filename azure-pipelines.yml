@@ -4,6 +4,8 @@ trigger:
 variables:
   imageRepo: kmapp
   tag: '$(Build.BuildId)'
+  MAVEN_CACHE_FOLDER: $(Pipeline.Workspace)/.m2/repository
+  MAVEN_OPTS: '-Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)'
 
 stages:
 - stage: Build
@@ -15,10 +17,15 @@ stages:
       vmImage: ubuntu-latest
       
     steps:
-    
+    - task: Cache@2
+      inputs:
+        key: 'maven | "$(Agent.OS)" | **/pom.xml'
+        path: '$(MAVEN_CACHE_FOLDER)'
+      displayName: Cache Maven local repo
     - task: Maven@4
       inputs:
         mavenPomFile: 'pom.xml'
+        options: '-Xmx3072m $(MAVEN_OPTS)'
         publishJUnitResults: true
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
         javaHomeOption: 'JDKVersion'
