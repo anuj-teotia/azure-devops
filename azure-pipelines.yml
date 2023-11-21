@@ -17,10 +17,7 @@ stages:
       vmImage: ubuntu-latest
       
     steps:
-    - task: CmdLine@2
-      inputs:
-        script: 'tree $(Pipeline.Workspace)'
-      displayName: List all files in $(Pipeline.Workspace) dir
+   
     - task: Cache@2
       inputs:
         key: 'maven | "$(Agent.OS)" | **/pom.xml'
@@ -36,6 +33,10 @@ stages:
         mavenAuthenticateFeed: false
         effectivePomSkip: false
         sonarQubeRunAnalysis: false
+    - task: CmdLine@2
+      inputs:
+        script: 'tree $(Pipeline.Workspace)'
+      displayName: List all files in $(Pipeline.Workspace) dir
     - task: Docker@2
       displayName: Build an image
       inputs:
