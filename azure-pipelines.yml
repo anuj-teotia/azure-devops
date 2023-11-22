@@ -5,7 +5,7 @@ variables:
   imageRepo: kmapp
   tag: '$(Build.BuildId)'
   MAVEN_CACHE_FOLDER: $(HOME)/.m2/repository
-  MAVEN_OPTS: '-Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)'
+
 
 stages:
 - stage: Build
