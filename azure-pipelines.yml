@@ -8,7 +8,7 @@ stages:
   - job: Build
     displayName: Maven Build
     pool:
-      vmImage: ubuntu:latest
+      vmImage: ubuntu-latest
     
     
     steps:
