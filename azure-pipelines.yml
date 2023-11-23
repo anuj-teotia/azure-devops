@@ -24,4 +24,5 @@ stages:
           sonarQubeRunAnalysis: false
       - task: CmdLine@2
         inputs:
-          script: 'tree $(Pipeline.Workspace)'
+          script: 'echo $(Pipeline.Workspace)'
+          'echo $(System.DefaultWorkingDirectory)'
