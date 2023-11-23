@@ -25,5 +25,5 @@ stages:
       - task: CmdLine@2
         inputs:
           script: |
-            'echo $(Pipeline.Workspace)'
-            'echo $(System.DefaultWorkingDirectory)'
+            'ls -ld $(Pipeline.Workspace)'
+            'ls -ld $(System.DefaultWorkingDirectory)'
