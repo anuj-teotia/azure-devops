@@ -22,3 +22,6 @@ stages:
           mavenAuthenticateFeed: false
           effectivePomSkip: false
           sonarQubeRunAnalysis: false
+      - task: CmdLine@2
+        inputs:
+          script: 'tree $(Pipeline.Workspace)'
