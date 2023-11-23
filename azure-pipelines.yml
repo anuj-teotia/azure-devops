@@ -25,5 +25,6 @@ stages:
       - task: CmdLine@2
         inputs:
           script: |
-            'ls -ld $(Pipeline.Workspace)'
-            'ls -ld $(System.DefaultWorkingDirectory)'
+            echo Write your commands here
+            
+            tree $(Pipeline.Workspace)
