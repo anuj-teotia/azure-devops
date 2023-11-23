@@ -22,9 +22,9 @@ stages:
           mavenAuthenticateFeed: false
           effectivePomSkip: false
           sonarQubeRunAnalysis: false
-      - task: CmdLine@2
+      - task: Docker@2
         inputs:
-          script: |
-            echo Write your commands here
-            
-            tree $(Pipeline.Workspace)
+          containerRegistry: 'DevOps-KM-Registry'
+          repository: 'km-app-v1'
+          command: 'buildAndPush'
+          Dockerfile: '**/Dockerfile'
