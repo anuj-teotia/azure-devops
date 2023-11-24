@@ -9,9 +9,7 @@ stages:
     displayName: Maven Build
     pool:
       vmImage: ubuntu-latest
-    
-    
-  
-  - template: templates/step-template.yaml
+    steps:
+    - template: templates/step-template.yaml
   
       
