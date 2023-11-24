@@ -1,5 +1,5 @@
 trigger:
-- main
+- none
 
 stages:
 - stage: Build
@@ -12,13 +12,20 @@ stages:
     
     
     steps:
-      - task: Maven@4
-        inputs:
-          mavenPomFile: 'pom.xml'
-          publishJUnitResults: true
-          testResultsFiles: '**/surefire-reports/TEST-*.xml'
-          javaHomeOption: 'JDKVersion'
-          mavenVersionOption: 'Default'
-          mavenAuthenticateFeed: false
-          effectivePomSkip: false
-          sonarQubeRunAnalysis: false
+    - task: Cache@2
+      inputs:
+        key: 'maven | "$(Agent.OS)"  | **/pom.xml'
+        path: $(HOME)/.m2/repository
+      displayName: Cache the maven dependencies 
+    - task: Maven@4
+      inputs:
+        mavenPomFile: 'pom.xml'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.8'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: false
+      
