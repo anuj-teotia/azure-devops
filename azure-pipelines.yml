@@ -16,7 +16,7 @@ stages:
       inputs:
         key: 'maven | "$(Agent.OS)"  | **/pom.xml'
         path: '$HOME/.m2/repository'
-        cacheHitVar: 'cachehit'
+      displayName: Cache the maven dependencies 
     - task: Maven@4
       inputs:
         mavenPomFile: 'pom.xml'
