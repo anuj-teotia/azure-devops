@@ -12,3 +12,4 @@ variables:
 steps:
 - script: echo $(Release)
 - script: echo variable group release $(groupRelease)
+- script: echo Secret API Key $(apikey)
