@@ -12,6 +12,11 @@ stages:
     
     
     steps:
+    - task: Cache@2
+      inputs:
+        key: 'maven | "$(Agent.OS)"  | **/pom.xml'
+        path: '$HOME/.m2/repository'
+        cacheHitVar: 'cachehit'
     - task: Maven@4
       inputs:
         mavenPomFile: 'pom.xml'
@@ -23,11 +28,4 @@ stages:
         mavenAuthenticateFeed: false
         effectivePomSkip: false
         sonarQubeRunAnalysis: false
-    - task: PowerShell@2
-      inputs:
-        targetType: 'inline'
-        script: |
-          # Write your PowerShell commands here.
-          
-          Get-ChildItem
       
