@@ -15,7 +15,7 @@ stages:
     - task: Cache@2
       inputs:
         key: 'maven | "$(Agent.OS)"  | **/pom.xml'
-        path: /home/vsts/.m2/repository
+        path: $(HOME)/.m2/repository
       displayName: Cache the maven dependencies 
     - task: Maven@4
       inputs:
