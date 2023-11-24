@@ -2,7 +2,6 @@ steps:
 - script: echo this is the step in the template!
   displayName: Script from template
 
-steps:
 - script: tree $(Pipeline.Workspace)
   displayName: List files template
 
