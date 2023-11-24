@@ -7,6 +7,8 @@ pool:
 variables:
 - name: Release
   value: 13.0
+- group: devops-km
 
 steps:
 - script: echo $(Release)
+- script: echo variable group release $(groupRelease)
