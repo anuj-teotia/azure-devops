@@ -11,7 +11,7 @@ stages:
       vmImage: ubuntu-latest
     
     
-    steps:
-    - template: templates/step-template.yaml
+  
+  - template: templates/step-template.yaml
   
       
