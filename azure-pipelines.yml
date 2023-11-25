@@ -1,5 +1,92 @@
 trigger:
-- none
+- main
+
+variables:
+  imageRepo: kmapp
+  tag: '$(Build.BuildId)'
 
 stages:
-- template: templates/stage-template.yaml
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+      
+    steps:
+    
+    - task: Maven@4
+      inputs:
+        mavenPomFile: 'pom.xml'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        javaHomeOption: 'JDKVersion'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: false
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        containerRegistry: 'DevOps-KM-Registry'
+        repository: '$(imageRepo)'
+        command: 'buildAndPush'
+        Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+        tags: |
+          $(tag)
+   
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Build.SourcesDirectory)/kubernetes'
+        artifact: 'manifests'
+        publishLocation: 'pipeline'
+
+- stage: Deploy
+  displayName: Deploy to Dev
+  dependsOn: Build
+  variables:
+    acrdevurl: 'azuredevopskm.azurecr.io'
+    replicaNo: 3
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy to AKS
+    environment: 'dev.default'
+    pool: 
+      vmImage: ubuntu-latest
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'current'
+              artifactName: 'manifests'
+              targetPath: '$(Pipeline.Workspace)/manifests'
+      
+          - task: replacetokens@5
+            displayName: Replace Tokens
+            inputs:
+              rootDirectory: '$(Pipeline.Workspace)/manifests/'
+              targetFiles: 'deployment.yaml'
+              encoding: 'auto'
+              tokenPattern: 'custom'
+              tokenPrefix: '#'
+              tokenSuffix: '#'
+              writeBOM: true
+              actionOnMissing: 'warn'
+              keepToken: false
+              actionOnNoFiles: 'continue'
+              enableTransforms: false
+              enableRecursion: false
+              useLegacyPattern: false
+              enableTelemetry: true
+         
+          - task: KubernetesManifest@0
+            inputs:
+              action: 'deploy'
+              namespace: 'default'
+              manifests: |
+                $(Pipeline.Workspace)/manifests/deployment.yaml
+                $(Pipeline.Workspace)/manifests/service.yaml
+              containers: '$(acrdevurl)/$(imageRepo):$(tag)'
