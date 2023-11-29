@@ -1,1 +1,1 @@
-<h1>Azure DevOps v1</h1>
+<h1>Azure DevOps</h1>
