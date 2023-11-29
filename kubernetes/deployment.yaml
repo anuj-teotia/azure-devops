@@ -1,18 +1,18 @@
 apiVersion : apps/v1
 kind: Deployment
 metadata:
-  name: kmapp 
+  name: azure-devops 
 spec:
   replicas: #replicaNo#
   selector:
     matchLabels:
-      app: kmapp
+      app: azure-devops 
   template:
     metadata:
       labels:
-        app: kmapp 
+        app: azure-devops 
     spec:
       containers:
-        - name: kmapp
-          image: azuredevopskm.azurecr.io/kmapp
+        - name: azure-devops
+          image: cwstageregistry.azurecr.io/cw-demo-app
     
