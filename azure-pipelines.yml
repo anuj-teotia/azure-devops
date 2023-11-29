@@ -2,7 +2,7 @@ trigger:
 - main
 
 variables:
-  imageRepo: kmapp
+  imageRepo: cw-demo-app
   tag: '$(Build.BuildId)'
 
 stages:
@@ -29,7 +29,7 @@ stages:
     - task: Docker@2
       displayName: Build an image
       inputs:
-        containerRegistry: 'DevOps-KM-Registry'
+        containerRegistry: 'cw-stage-registry'
         repository: '$(imageRepo)'
         command: 'buildAndPush'
         Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
@@ -46,8 +46,8 @@ stages:
   displayName: Deploy to Dev
   dependsOn: Build
   variables:
-    acrdevurl: 'azuredevopskm.azurecr.io'
-    replicaNo: 4
+    acrdevurl: 'cwstageregistry.azurecr.io'
+    replicaNo: 2
   jobs:
   - deployment: Deploy
     displayName: Deploy to AKS
